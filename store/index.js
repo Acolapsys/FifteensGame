@@ -9,23 +9,27 @@ export const state = () => ({
     x: 0,
     y: 3,
   },
+  isWinner: false,
 })
 
 export const mutations = {
   moveCell(state, cell) {
-    state.cells = [...state.cells] // для рективности
+    state.cells = [...state.cells] // для реактивности
     state.cells[state.emptyCell.y][state.emptyCell.x] = cell.value
     state.cells[cell.y][cell.x] = 0
     state.emptyCell = { x: cell.x, y: cell.y }
   },
+  setIsWinner(state, payload) {
+    state.isWinner = payload
+  },
 }
 export const actions = {
-  checkFieldFinished({ state }) {
+  checkFieldFinished({ state, commit }) {
     const result = state.cells
       .reduce((acc, el) => acc.concat(...el), [])
       .join(',')
     if (result === '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0') {
-      console.log('you win')
+      commit('setIsWinner', true)
     }
   },
   moveCell({ state, commit, dispatch }, cell) {
@@ -39,4 +43,8 @@ export const actions = {
       dispatch('checkFieldFinished')
     }
   },
+  setIsWinner({ commit }, payload) {
+    commit('setIsWinner', payload)
+  },
+  generateNewGame() {},
 }
