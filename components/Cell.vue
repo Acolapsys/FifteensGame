@@ -1,5 +1,5 @@
 <template>
-  <div class="cell">
+  <div class="cell" :class="{ empty: cellValue === 0 }">
     {{ cellValue }}
   </div>
 </template>
@@ -24,5 +24,11 @@ export default {
   justify-content: center;
   padding: 3px;
   margin: 3px;
+  cursor: pointer;
+}
+.empty {
+  border: none;
+  cursor: default;
+  color: white;
 }
 </style>

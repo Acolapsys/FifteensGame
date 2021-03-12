@@ -13,6 +13,7 @@ export const state = () => ({
 
 export const mutations = {
   moveCell(state, cell) {
+    state.cells = [...state.cells] // для рективности
     state.cells[state.emptyCell.y][state.emptyCell.x] = cell.value
     state.cells[cell.y][cell.x] = 0
     state.emptyCell = { x: cell.x, y: cell.y }

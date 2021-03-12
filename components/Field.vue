@@ -1,14 +1,15 @@
 <template>
   <div class="field">
     <div
-      v-for="(cellRow, idx) in cells"
-      :key="`${cellRow.length}_${idx}`"
+      v-for="(cellRow, y) in cells"
+      :key="`${cellRow.length}_${y}`"
       class="line"
     >
       <Cell
-        v-for="(cell, index) in cellRow"
-        :key="`${cell.x}_${index}`"
+        v-for="(cell, x) in cellRow"
+        :key="`${cell}_${x}`"
         :cell-value="cell"
+        @click.native="moveCell(x, y, cell)"
       />
     </div>
   </div>
@@ -24,6 +25,12 @@ export default {
     ...mapState({
       cells: (state) => state.cells,
     }),
+  },
+  methods: {
+    moveCell(x, y, cell) {
+      console.log(x, y, cell)
+      this.$store.dispatch('moveCell', { x, y, value: cell })
+    },
   },
 }
 </script>
