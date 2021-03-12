@@ -1,13 +1,13 @@
 export const state = () => ({
   cells: [
-    [0, 1, 2, 3],
-    [4, 5, 6, 7],
-    [8, 9, 10, 11],
-    [12, 13, 14, 15],
+    [1, 2, 3, 4],
+    [5, 6, 7, 8],
+    [9, 10, 11, 12],
+    [0, 13, 14, 15],
   ],
   emptyCell: {
     x: 0,
-    y: 0,
+    y: 3,
   },
 })
 
@@ -22,11 +22,13 @@ export const mutations = {
 export const actions = {
   checkFieldFinished({ state }) {
     const result = state.cells
-      .reduce((el, acc) => acc.concat(...el), [])
+      .reduce((acc, el) => acc.concat(...el), [])
       .join(',')
-    return result === '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0'
+    if (result === '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0') {
+      console.log('you win')
+    }
   },
-  moveCell({ state, commit }, cell) {
+  moveCell({ state, commit, dispatch }, cell) {
     if (
       (Math.abs(cell.x - state.emptyCell.x) === 1 &&
         cell.y - state.emptyCell.y === 0) ||
@@ -34,6 +36,7 @@ export const actions = {
         cell.x - state.emptyCell.x === 0)
     ) {
       commit('moveCell', cell)
+      dispatch('checkFieldFinished')
     }
   },
 }
