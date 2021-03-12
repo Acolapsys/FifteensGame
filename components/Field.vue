@@ -28,7 +28,6 @@ export default {
   },
   methods: {
     moveCell(x, y, cell) {
-      console.log(x, y, cell)
       this.$store.dispatch('moveCell', { x, y, value: cell })
     },
   },

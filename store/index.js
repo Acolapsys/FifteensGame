@@ -6,8 +6,8 @@ export const state = () => ({
     [0, 13, 14, 15],
   ],
   emptyCell: {
-    x: 0,
     y: 3,
+    x: 0,
   },
   isWinner: false,
 })
@@ -22,14 +22,29 @@ export const mutations = {
   setIsWinner(state, payload) {
     state.isWinner = payload
   },
+  loadGame(state, game) {
+    const tempArray = [[], [], [], []]
+    const gameNew = game.split(',')
+    gameNew.forEach((el, idx) => {
+      const y = Math.floor(idx / 4)
+      const x = idx % 4
+      tempArray[y][x] = +el
+      if (Number(el) === 0) {
+        state.emptyCell = { y, x }
+      }
+    })
+    state.cells = [...tempArray]
+  },
 }
 export const actions = {
-  checkFieldFinished({ state, commit }) {
+  checkFieldFinishedAndSave({ state, commit, dispatch }) {
     const result = state.cells
       .reduce((acc, el) => acc.concat(...el), [])
       .join(',')
     if (result === '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0') {
       commit('setIsWinner', true)
+    } else {
+      dispatch('saveGame', result)
     }
   },
   moveCell({ state, commit, dispatch }, cell) {
@@ -40,11 +55,20 @@ export const actions = {
         cell.x - state.emptyCell.x === 0)
     ) {
       commit('moveCell', cell)
-      dispatch('checkFieldFinished')
+      dispatch('checkFieldFinishedAndSave')
     }
   },
   setIsWinner({ commit }, payload) {
     commit('setIsWinner', payload)
   },
-  generateNewGame() {},
+  generateNewGame({ commit }) {
+    commit('setIsWinner', false)
+  },
+  saveGame(context, currentGame) {
+    console.log(currentGame, 'curr')
+    localStorage.setItem('fifteensGame', currentGame)
+  },
+  loadGame({ commit }, game) {
+    commit('loadGame', game)
+  },
 }
