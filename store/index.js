@@ -26,7 +26,14 @@ export const actions = {
       .join(',')
     return result === '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0'
   },
-  moveCell({ commit }, cell) {
-    commit('moveCell', cell)
+  moveCell({ state, commit }, cell) {
+    if (
+      (Math.abs(cell.x - state.emptyCell.x) === 1 &&
+        cell.y - state.emptyCell.y === 0) ||
+      (Math.abs(cell.y - state.emptyCell.y) === 1 &&
+        cell.x - state.emptyCell.x === 0)
+    ) {
+      commit('moveCell', cell)
+    }
   },
 }
