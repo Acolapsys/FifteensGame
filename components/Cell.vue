@@ -1,6 +1,8 @@
 <template>
   <div class="cell" :class="{ empty: cellValue === 0 }">
-    {{ cellValue }}
+    <span v-if="cellValue !== 0">
+      {{ cellValue }}
+    </span>
   </div>
 </template>
 <script>
@@ -25,10 +27,13 @@ export default {
   padding: 3px;
   margin: 3px;
   cursor: pointer;
+  box-shadow: 1px 1px 1px 0;
+  background-color: rgb(238, 231, 231);
 }
 .empty {
   border: none;
   cursor: default;
   color: white;
+  background-color: white;
 }
 </style>
