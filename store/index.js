@@ -20,24 +20,11 @@ export const mutations = {
     state.cells[state.emptyCell.y][state.emptyCell.x] = cell.value
     state.cells[cell.y][cell.x] = 0
     state.emptyCell = { x: cell.x, y: cell.y }
+    state.counter++
   },
   setIsWinner(state, payload) {
     state.isWinner = payload
   },
-  // loadGame(state, game) {
-  //   const tempArray = [[], [], [], []]
-  //   const gameNew = game.split(',')
-  //   gameNew.forEach((el, idx) => {
-  //     const y = Math.floor(idx / 4)
-  //     const x = idx % 4
-  //     tempArray[y][x] = +el
-  //     if (Number(el) === 0) {
-  //       state.emptyCell = { y, x }
-  //     }
-  //   })
-  //   state.cells = [...tempArray]
-  //   state.isLoaded = true
-  // },
   setField(state, gameField) {
     const tempArray = [[], [], [], []]
     gameField.forEach((el, idx) => {
@@ -88,18 +75,20 @@ export const actions = {
     for (let i = 0; i < fullSize; i++) {
       tempArray.splice(Math.floor(Math.random() * (i + 1)), 0, i)
     }
-    console.log(tempArray)
     let validateValue = 0
     for (let i = 0; i < fullSize - 1; i++) {
       for (let j = i + 1; j < fullSize; j++) {
-        if (tempArray[i] > tempArray[j]) {
+        if (
+          tempArray[i] > tempArray[j] &&
+          tempArray[i] !== 0 &&
+          tempArray[j] !== 0
+        ) {
           validateValue++
         }
       }
     }
     const zeroRow = Math.ceil((tempArray.indexOf(0) + 1) / state.arraySize) || 1
     validateValue += zeroRow
-    console.log('check', validateValue, zeroRow)
     if (validateValue % 2 !== 0) {
       const tempValue = tempArray[fullSize - 1]
       tempArray[fullSize - 1] = tempArray[fullSize - 2]
@@ -110,7 +99,7 @@ export const actions = {
   saveGame(context, currentGame) {
     localStorage.setItem('fifteensGame', currentGame)
   },
-  loadGame({ commit }, game) {
+  loadGame({ state, commit }, game) {
     const gameNew = game.split(',')
     commit('setField', gameNew)
     state.isLoaded = true
