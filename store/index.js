@@ -48,7 +48,7 @@ export const actions = {
       .join(',')
     if (result === '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0') {
       commit('setIsWinner', true)
-      localStorage.removeItem('fifteensGame')
+      dispatch('clearSavedGame')
     } else {
       dispatch('saveGame', result)
     }
@@ -98,6 +98,9 @@ export const actions = {
   },
   saveGame(context, currentGame) {
     localStorage.setItem('fifteensGame', currentGame)
+  },
+  clearSavedGame() {
+    localStorage.removeItem('fifteensGame')
   },
   loadGame({ state, commit }, game) {
     const gameNew = game.split(',')
