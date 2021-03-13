@@ -10,6 +10,7 @@ export const state = () => ({
     x: 0,
   },
   isWinner: false,
+  isLoaded: false,
 })
 
 export const mutations = {
@@ -34,6 +35,10 @@ export const mutations = {
       }
     })
     state.cells = [...tempArray]
+    state.isLoaded = true
+  },
+  setIsLoaded(state, flag) {
+    state.isLoaded = flag
   },
 }
 export const actions = {
@@ -43,6 +48,7 @@ export const actions = {
       .join(',')
     if (result === '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0') {
       commit('setIsWinner', true)
+      localStorage.removeItem('fifteensGame')
     } else {
       dispatch('saveGame', result)
     }
@@ -65,10 +71,12 @@ export const actions = {
     commit('setIsWinner', false)
   },
   saveGame(context, currentGame) {
-    console.log(currentGame, 'curr')
     localStorage.setItem('fifteensGame', currentGame)
   },
   loadGame({ commit }, game) {
     commit('loadGame', game)
+  },
+  setIsLoaded({ commit }, flag) {
+    commit('setIsLoaded', flag)
   },
 }

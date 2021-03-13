@@ -2,6 +2,22 @@
   <v-row justify="center" align="center">
     <v-col cols="12" sm="8" md="6">
       <div class="field_wrapper">
+        <div
+          class="help_sign"
+          @mouseover.stop="showHelp(true)"
+          @mouseleave.stop="showHelp(false)"
+        >
+          ?
+        </div>
+        <div v-if="isHelpVisible" class="help">
+          Ваша задача переставить все фишки по возрастанию номеров. Разрешается
+          передвигать на свободное поле фишки, находящиеся рядом с ним.
+          <br />
+          При закрытии окна, игра сохранится в текущем состоянии
+        </div>
+        <div v-if="isGameLoaded" class="notification">
+          Сохраненная игра загружена
+        </div>
         <h2>Игра в пятнашки</h2>
         <Field />
       </div>
@@ -10,10 +26,31 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Field from '~/components/Field'
 export default {
   components: {
     Field,
+  },
+  data() {
+    return {
+      isHelpVisible: false,
+    }
+  },
+  computed: {
+    ...mapState({
+      isGameLoaded: (state) => state.isLoaded,
+    }),
+  },
+  mounted() {
+    setTimeout(() => {
+      this.$store.dispatch('setIsLoaded', false)
+    }, 1500)
+  },
+  methods: {
+    showHelp(value) {
+      this.isHelpVisible = value
+    },
   },
 }
 </script>
@@ -29,8 +66,49 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  position: relative;
 }
 h2 {
   margin-bottom: 30px;
+}
+.help_sign {
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  min-width: 25px;
+  min-height: 25px;
+  border: 1px solid black;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  cursor: default;
+}
+.help {
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  min-width: 100px;
+  min-height: 25px;
+  border: 1px solid black;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: default;
+  background-color: #fff;
+  padding: 10px;
+}
+.notification {
+  position: absolute;
+  top: -10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  box-shadow: 1px 1px 0 0;
+  z-index: 20;
+  opacity: 1;
+  background-color: #fff;
+  padding: 20px;
 }
 </style>

@@ -1,10 +1,11 @@
 <template>
   <v-app>
     <v-app-bar fixed app>
-      <v-toolbar-title v-text="title" />
-      <v-spacer></v-spacer>
-      <span class="mr-5" @click="newGame">Новая игра</span>
-      <span @click="saveGame">Сохранить игру</span>
+      <div class="container">
+        <v-toolbar-title v-text="title" />
+        <v-spacer></v-spacer>
+        <span class="new_game mr-5" @click="newGame">Новая игра</span>
+      </div>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -42,3 +43,17 @@ export default {
   },
 }
 </script>
+<style lang="scss" scoped>
+.container {
+  max-width: 1024px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+.new_game {
+  cursor: pointer;
+  &:hover {
+    opacity: 0.7;
+  }
+}
+</style>
