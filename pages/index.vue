@@ -20,14 +20,10 @@
         </div>
         <h2>Игра в пятнашки</h2>
         <Field />
-        <p class="mt-3">Количество ходов: {{ counter }}</p>
+        <p class="mt-5">Количество ходов: {{ counter }}</p>
         <p class="mt-3">
           Прошло времени:
-          {{
-            new Date(
-              gameTime + new Date().getTimezoneOffset() * 60000
-            ).toLocaleTimeString()
-          }}
+          {{ gameTime | toTimer }}
         </p>
       </div>
     </v-col>
@@ -53,19 +49,31 @@ export default {
       isGameLoaded: (state) => state.isLoaded,
       counter: (state) => state.counter,
       startTime: (state) => state.startTime,
+      isWinner: (state) => state.isWinner,
     }),
+  },
+  watch: {
+    isWinner(value) {
+      if (value) {
+        clearInterval(this.interval)
+        this.interval = 0
+        console.log('clearInterval', this.interval)
+      }
+    },
+    startTime() {
+      console.log(this.interval, 'interval')
+      if (!this.interval) {
+        this.startTimer()
+      }
+    },
   },
   mounted() {
     if (this.isGameLoaded) {
       setTimeout(() => {
         this.$store.dispatch('setIsLoaded', false)
       }, 1500)
-      this.interval = setInterval(() => {
-        console.log(new Date(), new Date(this.startTime))
-        this.gameTime = new Date() - new Date(this.startTime)
-        console.log(this.gameTime)
-      }, 1000)
     }
+    this.startTimer()
   },
   beforeDestroy() {
     clearInterval(this.interval)
@@ -73,6 +81,11 @@ export default {
   methods: {
     showHelp(value) {
       this.isHelpVisible = value
+    },
+    startTimer() {
+      this.interval = setInterval(() => {
+        this.gameTime = new Date() - new Date(this.startTime)
+      }, 1000)
     },
   },
 }

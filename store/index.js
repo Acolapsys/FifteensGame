@@ -55,6 +55,9 @@ export const mutations = {
   setFinishTime(state) {
     state.finishTime = new Date().getTime()
   },
+  clearFinishTime(state) {
+    state.finishTime = 0
+  },
 }
 export const actions = {
   checkFieldFinishedAndSave({ state, commit, dispatch }) {
@@ -92,6 +95,7 @@ export const actions = {
     commit('setIsLoaded', false)
     commit('clearCounter')
     commit('setStartTime', new Date().getTime())
+    commit('clearFinishTime')
     dispatch('generateNewField')
   },
   async generateNewField({ state, commit, dispatch }) {

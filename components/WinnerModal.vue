@@ -3,7 +3,7 @@
     <div class="modal">
       <h1>Вы выиграли!</h1>
       <p>Количество ходов: {{ counter }}</p>
-      <p>Время игры: {{ gameTime }}</p>
+      <p>Время игры: {{ (finishTime - startTime) | toTimer }}</p>
       <p>Хотите сыграть еще?</p>
       <div class="buttons">
         <v-btn class="mr-10" @click="startNewGame">Да</v-btn>
@@ -26,6 +26,8 @@ export default {
   },
   computed: {
     ...mapState({
+      startTime: (state) => state.startTime,
+      finishTime: (state) => state.finishTime,
       counter: (state) => state.counter,
     }),
   },
