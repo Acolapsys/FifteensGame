@@ -12,17 +12,25 @@
         <nuxt />
       </v-container>
     </v-main>
-    <WinnerModal v-if="isWinner" @close="closeModal" />
+    <WinnerModal v-if="isWinner" @close="closeWinnerModal" />
+    <ConfirmationModal
+      v-if="isConfirmationVisible"
+      @close="closeConfirmation"
+    />
   </v-app>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import WinnerModal from '~/components/WinnerModal'
+import ConfirmationModal from '~/components/ConfirmationModal'
 export default {
+  components: { WinnerModal, ConfirmationModal },
   middleware: 'loadGame',
   data() {
     return {
       title: 'Пятнашки',
+      isConfirmationVisible: false,
     }
   },
   computed: {
@@ -31,11 +39,14 @@ export default {
     }),
   },
   methods: {
-    closeModal() {
+    closeWinnerModal() {
       this.$store.dispatch('setIsWinner', false)
     },
     startNewGame() {
-      this.$store.dispatch('startNewGame')
+      this.isConfirmationVisible = true
+    },
+    closeConfirmation() {
+      this.isConfirmationVisible = false
     },
   },
 }

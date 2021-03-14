@@ -110,7 +110,7 @@ h2 {
 .help_sign {
   position: absolute;
   top: 20px;
-  right: 10px;
+  right: 15px;
   min-width: 25px;
   min-height: 25px;
   border: 1px solid black;

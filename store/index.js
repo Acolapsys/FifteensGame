@@ -67,7 +67,6 @@ export const actions = {
     if (result === '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0') {
       commit('setIsWinner', true)
       commit('setFinishTime')
-      dispatch('clearSavedGame')
     } else {
       dispatch('saveGame', {
         result,
@@ -96,6 +95,7 @@ export const actions = {
     commit('clearCounter')
     commit('setStartTime', new Date().getTime())
     commit('clearFinishTime')
+    dispatch('clearSavedGame')
     dispatch('generateNewField')
   },
   async generateNewField({ state, commit, dispatch }) {
