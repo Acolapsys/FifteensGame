@@ -20,6 +20,7 @@
         </div>
         <h2>Игра в пятнашки</h2>
         <Field />
+        <p>Количество ходов: {{ counter }}</p>
       </div>
     </v-col>
   </v-row>
@@ -40,6 +41,7 @@ export default {
   computed: {
     ...mapState({
       isGameLoaded: (state) => state.isLoaded,
+      counter: (state) => state.counter,
     }),
   },
   mounted() {

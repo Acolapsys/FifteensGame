@@ -2,6 +2,7 @@
   <div class="modal_wrapper">
     <div class="modal">
       <h1>Вы выиграли!</h1>
+      <p>Количество ходов: {{ counter }}</p>
       <p>Хотите сыграть еще?</p>
       <div class="buttons">
         <v-btn class="mr-10" @click="startNewGame">Да</v-btn>
@@ -11,6 +12,7 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   methods: {
     close() {
@@ -20,6 +22,11 @@ export default {
       this.$store.dispatch('startNewGame')
       this.close()
     },
+  },
+  computed: {
+    ...mapState({
+      counter: (state) => state.counter,
+    }),
   },
 }
 </script>

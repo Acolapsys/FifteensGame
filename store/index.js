@@ -26,10 +26,7 @@ export const mutations = {
   setIsWinner(state, payload) {
     state.isWinner = payload
   },
-  increaseCounter({ state }) {
-    state.counter++
-  },
-  clearCounter({ state }) {
+  clearCounter(state) {
     state.counter = 0
   },
   setField(state, gameField) {
@@ -80,13 +77,14 @@ export const actions = {
     commit('clearCounter')
     dispatch('generateNewField')
   },
-  generateNewField({ state, commit }) {
+  async generateNewField({ state, commit, dispatch }) {
     const tempArray = []
     const fullSize = state.arraySize ** 2
     for (let i = 0; i < fullSize; i++) {
       tempArray.splice(Math.floor(Math.random() * (i + 1)), 0, i)
     }
-    const validateValue = dispatch('getValidateFieldValue', tempArray)
+    const validateValue = await dispatch('getValidateFieldValue', tempArray)
+    console.log(validateValue, tempArray)
     if (validateValue % 2 !== 0) {
       const tempValue = tempArray[fullSize - 1]
       tempArray[fullSize - 1] = tempArray[fullSize - 2]
@@ -94,7 +92,7 @@ export const actions = {
     }
     commit('setField', tempArray)
   },
-  getValidateFieldValue(context, fieldArray) {
+  getValidateFieldValue({ state }, fieldArray) {
     const fullSize = state.arraySize ** 2
     let validateValue = 0
     for (let i = 0; i < fullSize - 1; i++) {
@@ -118,7 +116,7 @@ export const actions = {
   loadGame({ state, commit }, game) {
     const gameNew = game.split(',')
     commit('setField', gameNew)
-    state.isLoaded = true
+    commit('setIsLoaded', true)
   },
   setIsLoaded({ commit }, flag) {
     commit('setIsLoaded', flag)
