@@ -17,7 +17,7 @@ export default {
       this.$emit('close')
     },
     startNewGame() {
-      this.$store.dispatch('generateNewGame')
+      this.$store.dispatch('startNewGame')
       this.close()
     },
   },

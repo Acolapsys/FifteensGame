@@ -12,6 +12,7 @@ export const state = () => ({
   isWinner: false,
   isLoaded: false,
   arraySize: 4,
+  counter: 0,
 })
 
 export const mutations = {
@@ -24,6 +25,12 @@ export const mutations = {
   },
   setIsWinner(state, payload) {
     state.isWinner = payload
+  },
+  increaseCounter({ state }) {
+    state.counter++
+  },
+  clearCounter({ state }) {
+    state.counter = 0
   },
   setField(state, gameField) {
     const tempArray = [[], [], [], []]
@@ -67,34 +74,40 @@ export const actions = {
   setIsWinner({ commit }, payload) {
     commit('setIsWinner', payload)
   },
-  generateNewGame({ state, commit }) {
+  startNewGame({ commit, dispatch }) {
     commit('setIsWinner', false)
     commit('setIsLoaded', false)
+    commit('clearCounter')
+    dispatch('generateNewField')
+  },
+  generateNewField({ state, commit }) {
     const tempArray = []
     const fullSize = state.arraySize ** 2
     for (let i = 0; i < fullSize; i++) {
       tempArray.splice(Math.floor(Math.random() * (i + 1)), 0, i)
     }
-    let validateValue = 0
-    for (let i = 0; i < fullSize - 1; i++) {
-      for (let j = i + 1; j < fullSize; j++) {
-        if (
-          tempArray[i] > tempArray[j] &&
-          tempArray[i] !== 0 &&
-          tempArray[j] !== 0
-        ) {
-          validateValue++
-        }
-      }
-    }
-    const zeroRow = Math.ceil((tempArray.indexOf(0) + 1) / state.arraySize) || 1
-    validateValue += zeroRow
+    const validateValue = dispatch('getValidateFieldValue', tempArray)
     if (validateValue % 2 !== 0) {
       const tempValue = tempArray[fullSize - 1]
       tempArray[fullSize - 1] = tempArray[fullSize - 2]
       tempArray[fullSize - 2] = tempValue
     }
     commit('setField', tempArray)
+  },
+  getValidateFieldValue(context, fieldArray) {
+    const fullSize = state.arraySize ** 2
+    let validateValue = 0
+    for (let i = 0; i < fullSize - 1; i++) {
+      for (let j = i + 1; j < fullSize; j++) {
+        if (fieldArray[i] > fieldArray[j] && fieldArray[j] !== 0) {
+          validateValue++
+        }
+      }
+    }
+    const rowWithEmptyCell =
+      Math.ceil((fieldArray.indexOf(0) + 1) / state.arraySize) || 1
+    validateValue += rowWithEmptyCell
+    return validateValue
   },
   saveGame(context, currentGame) {
     localStorage.setItem('fifteensGame', currentGame)

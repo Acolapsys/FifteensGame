@@ -4,7 +4,7 @@
       <div class="container">
         <v-toolbar-title v-text="title" />
         <v-spacer></v-spacer>
-        <span class="new_game mr-5" @click="newGame">Новая игра</span>
+        <span class="new_game mr-5" @click="startNewGame">Новая игра</span>
       </div>
     </v-app-bar>
     <v-main>
@@ -34,11 +34,8 @@ export default {
     closeModal() {
       this.$store.dispatch('setIsWinner', false)
     },
-    newGame() {
-      this.$store.dispatch('generateNewGame')
-    },
-    saveGame() {
-      this.$store.dispatch('saveGame')
+    startNewGame() {
+      this.$store.dispatch('startNewGame')
     },
   },
 }
