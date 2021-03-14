@@ -49,11 +49,11 @@ export const mutations = {
   setIsLoaded(state, flag) {
     state.isLoaded = flag
   },
-  setStartTime(state) {
-    state.startTime = new Date()
+  setStartTime(state, date) {
+    state.startTime = new Date(date).getTime()
   },
   setFinishTime(state) {
-    state.finishTime = new Date()
+    state.finishTime = new Date().getTime()
   },
 }
 export const actions = {
@@ -91,7 +91,7 @@ export const actions = {
     commit('setIsWinner', false)
     commit('setIsLoaded', false)
     commit('clearCounter')
-    commit('setStartTime')
+    commit('setStartTime', new Date().getTime())
     dispatch('generateNewField')
   },
   async generateNewField({ state, commit, dispatch }) {

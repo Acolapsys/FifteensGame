@@ -20,7 +20,15 @@
         </div>
         <h2>Игра в пятнашки</h2>
         <Field />
-        <p>Количество ходов: {{ counter }}</p>
+        <p class="mt-3">Количество ходов: {{ counter }}</p>
+        <p class="mt-3">
+          Прошло времени:
+          {{
+            new Date(
+              gameTime + new Date().getTimezoneOffset() * 60000
+            ).toLocaleTimeString()
+          }}
+        </p>
       </div>
     </v-col>
   </v-row>
@@ -36,18 +44,31 @@ export default {
   data() {
     return {
       isHelpVisible: false,
+      interval: null,
+      gameTime: 0,
     }
   },
   computed: {
     ...mapState({
       isGameLoaded: (state) => state.isLoaded,
       counter: (state) => state.counter,
+      startTime: (state) => state.startTime,
     }),
   },
   mounted() {
-    setTimeout(() => {
-      this.$store.dispatch('setIsLoaded', false)
-    }, 1500)
+    if (this.isGameLoaded) {
+      setTimeout(() => {
+        this.$store.dispatch('setIsLoaded', false)
+      }, 1500)
+      this.interval = setInterval(() => {
+        console.log(new Date(), new Date(this.startTime))
+        this.gameTime = new Date() - new Date(this.startTime)
+        console.log(this.gameTime)
+      }, 1000)
+    }
+  },
+  beforeDestroy() {
+    clearInterval(this.interval)
   },
   methods: {
     showHelp(value) {
