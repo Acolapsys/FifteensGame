@@ -13,6 +13,8 @@ export const state = () => ({
   isLoaded: false,
   arraySize: 4,
   counter: 0,
+  startTime: 0,
+  finishTime: 0,
 })
 
 export const mutations = {
@@ -29,6 +31,9 @@ export const mutations = {
   clearCounter(state) {
     state.counter = 0
   },
+  setCounter(state, counter) {
+    state.counter = counter
+  },
   setField(state, gameField) {
     const tempArray = [[], [], [], []]
     gameField.forEach((el, idx) => {
@@ -44,6 +49,12 @@ export const mutations = {
   setIsLoaded(state, flag) {
     state.isLoaded = flag
   },
+  setStartTime(state) {
+    state.startTime = new Date()
+  },
+  setFinishTime(state) {
+    state.finishTime = new Date()
+  },
 }
 export const actions = {
   checkFieldFinishedAndSave({ state, commit, dispatch }) {
@@ -52,9 +63,14 @@ export const actions = {
       .join(',')
     if (result === '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0') {
       commit('setIsWinner', true)
+      commit('setFinishTime')
       dispatch('clearSavedGame')
     } else {
-      dispatch('saveGame', result)
+      dispatch('saveGame', {
+        result,
+        counter: state.counter,
+        startTime: state.startTime,
+      })
     }
   },
   moveCell({ state, commit, dispatch }, cell) {
@@ -75,6 +91,7 @@ export const actions = {
     commit('setIsWinner', false)
     commit('setIsLoaded', false)
     commit('clearCounter')
+    commit('setStartTime')
     dispatch('generateNewField')
   },
   async generateNewField({ state, commit, dispatch }) {
@@ -108,14 +125,16 @@ export const actions = {
     return validateValue
   },
   saveGame(context, currentGame) {
-    localStorage.setItem('fifteensGame', currentGame)
+    localStorage.setItem('fifteensGame', JSON.stringify(currentGame))
   },
   clearSavedGame() {
     localStorage.removeItem('fifteensGame')
   },
   loadGame({ state, commit }, game) {
-    const gameNew = game.split(',')
+    const gameNew = game.result.split(',')
     commit('setField', gameNew)
+    commit('setStartTime', game.startTime)
+    commit('setCounter', game.counter)
     commit('setIsLoaded', true)
   },
   setIsLoaded({ commit }, flag) {
