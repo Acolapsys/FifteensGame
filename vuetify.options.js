@@ -8,7 +8,7 @@ export default {
   customVariables: ['~/assets/variables.scss'],
   optionsPath: './vuetify.options.js',
   theme: {
-    dark: true,
+    dark: false,
     themes: {
       dark: {
         primary: colors.blue.darken2,
